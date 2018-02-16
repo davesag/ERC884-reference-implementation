@@ -39,7 +39,6 @@ jobs:
           name: Javascript Linter
           command: npm run lint:js
 
-      TODO: Enable code coverage when we have code to properly test.
       - run:
           name: Unit tests with code coverage
           command: npm run test:cov
