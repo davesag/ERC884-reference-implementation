@@ -3,6 +3,7 @@ pragma solidity ^0.4.19;
 import 'zeppelin-solidity/contracts/token/ERC20/MintableToken.sol';
 import './ERC884.sol';
 
+
 /**
  *  An `ERC20` compatible Token that conforms to Delaware State Senate,
  *  149th General Assembly, Senate Bill No. 69: An act to Amend Title 8
