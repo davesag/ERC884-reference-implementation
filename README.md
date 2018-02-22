@@ -1,6 +1,6 @@
 # ERC884-reference-implementation
 
-An Interface and Reference Implementation of the draft ERC-884 (Regulation A+) Token.
+An Interface and Reference Implementation of the draft ERC-884 Delaware General Corporate Law compliant (DGCL) Token.
 
 * `develop` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/develop/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
 * `master` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/master/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
@@ -9,7 +9,7 @@ See [ethereum/EIPs/pull/884](https://github.com/ethereum/EIPs/pull/884) for the 
 
 ## Status
 
-ERC-884 is a `DRAFT` proposal to standardise an ERC20 compatible Token that conforms to Regulation A+.
+ERC-884 is a `DRAFT` proposal to standardise an ERC20 compatible Token that is compliant with Delaware General Corporate Law.
 
 It has not been accepted yet and the details are subject to change.
 
