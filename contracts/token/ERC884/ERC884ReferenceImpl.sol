@@ -1,6 +1,7 @@
 pragma solidity ^0.4.19;
 
 import 'zeppelin-solidity/contracts/token/ERC20/MintableToken.sol';
+import './ERC884.sol';
 
 
 /**
@@ -21,7 +22,7 @@ import 'zeppelin-solidity/contracts/token/ERC20/MintableToken.sol';
  *
  *  @dev Ref https://github.com/ethereum/EIPs/pull/884
  */
-contract ERC884ReferenceImpl is MintableToken {
+contract ERC884ReferenceImpl is ERC884, MintableToken {
 
     bytes32 constant private ZERO_BYTES = bytes32(0);
     address constant private ZERO_ADDRESS = address(0);
@@ -29,51 +30,33 @@ contract ERC884ReferenceImpl is MintableToken {
     uint public decimals = 0;
 
     mapping(address => bytes32) private verified;
+    mapping(address => address) private cancellations;
+    mapping(address => uint256) private holderIndices;
 
-    address[] private owners;
-
-    /**
-     *  This event is emitted when a verified address and associated identity hash are
-     *  added to the contract.
-     *  @param addr The address that was added.
-     *  @param hash The identity hash associated with the address.
-     *  @param sender The address that caused the address to be added.
-     */
-    event VerifiedAddressAdded(
-        address indexed addr,
-        bytes32 hash,
-        address indexed sender
-    );
-
-    /**
-     *  This event is emitted when a verified address its associated identity hash are
-     *  removed from the contract.
-     *  @param addr The address that was removed.
-     *  @param sender The address that caused the address to be removed.
-     */
-    event VerifiedAddressRemoved(address indexed addr, address indexed sender);
-
-    /**
-     *  This event is emitted when the identity hash associated with a verified address is updated.
-     *  @param addr The address whose hash was updated.
-     *  @param oldHash The identity hash that was associated with the address.
-     *  @param hash The hash now associated with the address.
-     *  @param sender The address that caused the hash to be updated.
-     */
-    event VerifiedAddressUpdated(
-        address indexed addr,
-        bytes32 oldHash,
-        bytes32 hash,
-        address indexed sender
-    );
+    address[] private stockholders;
 
     modifier isVerifiedAddress(address addr) {
         require(verified[addr] != ZERO_BYTES);
         _;
     }
 
+    modifier isStockholder(address addr) {
+        require(holderIndices[addr] != 0);
+        _;
+    }
+
+    modifier isNotStockholder(address addr) {
+        require(holderIndices[addr] == 0);
+        _;
+    }
+
+    modifier isNotCancelled(address addr) {
+        require(cancellations[addr] == ZERO_ADDRESS);
+        _;
+    }
+
     /**
-     * As each token is minted it is added to the owners array.
+     * As each token is minted it is added to the stockholders array.
      * @param _to The address that will receive the minted tokens.
      * @param _amount The amount of tokens to mint.
      * @return A boolean that indicates if the operation was successful.
@@ -85,25 +68,40 @@ contract ERC884ReferenceImpl is MintableToken {
         isVerifiedAddress(_to)
         returns (bool)
     {
-        owners.push(_to);
+        // if the address does not already own stock then
+        // add the address to the stockholders array and record the index.
+        updateStockholders(_to);
         return super.mint(_to, _amount);
     }
 
     /**
-     *  By counting the number of Token owners using `totalSupply`
-     *  you can retrieve the complete list of Token owners, one at a time.
-     *  It MUST throw if `index >= totalSupply()`.
-     *  @param index The zero-based index of the owner.
-     *  @return the address of the Token owner with the given index.
+     *  The number of addresses that own tokens.
+     *  @return the number of unique addresses that own tokens.
      */
-    function ownerAt(uint256 index)
+    function holderCount()
+        public
+        onlyOwner
+        view
+        returns (uint)
+    {
+        return stockholders.length;
+    }
+
+    /**
+     *  By counting the number of Token holders using `holderCount`
+     *  you can retrieve the complete list of Token holders, one at a time.
+     *  It MUST throw if `index >= holderCount()`.
+     *  @param index The zero-based index of the holder.
+     *  @return the address of the Token holder with the given index.
+     */
+    function holderAt(uint256 index)
         public
         onlyOwner
         view
         returns (address)
     {
-        require(index < totalSupply_);
-        return owners[index];
+        require(index < stockholders.length);
+        return stockholders[index];
     }
 
     /**
@@ -112,11 +110,12 @@ contract ERC884ReferenceImpl is MintableToken {
      *  `VerifiedAddressAdded(addr, hash, msg.sender)`.
      *  It MUST throw if the supplied address or hash are zero, or if the address has already been supplied.
      *  @param addr The address of the person represented by the supplied hash.
-     *  @param hash A cryptographic hash of the address owner's verified information.
+     *  @param hash A cryptographic hash of the address holder's verified information.
      */
     function addVerified(address addr, bytes32 hash)
         public
         onlyOwner
+        isNotCancelled(addr)
     {
         require(addr != ZERO_ADDRESS);
         require(hash != ZERO_BYTES);
@@ -149,21 +148,85 @@ contract ERC884ReferenceImpl is MintableToken {
      *  `VerifiedAddressUpdated(addr, oldHash, hash, msg.sender)`.
      *  If the hash is the same as the value already stored then
      *  no `VerifiedAddressUpdated` event is to be emitted.
-     *  It MUST throw if the supplied address or hash are zero, or if the address is unknown to the contract.
+     *  It MUST throw if the hash is zero, or if the address is unverified.
      *  @param addr The verified address of the person represented by the supplied hash.
-     *  @param hash A new cryptographic hash of the address owner's updated verified information.
+     *  @param hash A new cryptographic hash of the address holder's updated verified information.
      */
     function updateVerified(address addr, bytes32 hash)
         public
         onlyOwner
+        isVerifiedAddress(addr)
     {
-        require(addr != ZERO_ADDRESS);
         require(hash != ZERO_BYTES);
         bytes32 oldHash = verified[addr];
         if (oldHash != hash) {
             verified[addr] = hash;
             VerifiedAddressUpdated(addr, oldHash, hash, msg.sender);
         }
+    }
+
+    /**
+     *  Cancel the original address and reissue the Tokens to the replacement address.
+     *  Access to this function MUST be strictly controlled.
+     *  The `original` address MUST be removed from the set of verified addresses.
+     *  Throw if the `original` address supplied is not a stockholder.
+     *  Throw if the replacement address is not a verified address.
+     *  This function MUST emit the `VerifiedAddressSuperseded` event.
+     *  @param original The address to be superseded. This address MUST NOT be reused.
+     *  @param replacement The address  that supersedes the original. This address MUST be verified.
+     */
+    function cancelAndReissue(address original, address replacement)
+        public
+        onlyOwner
+        isStockholder(original)
+        isNotStockholder(replacement)
+        isVerifiedAddress(replacement)
+    {
+        // replace the original address in the stockholders array
+        // and update all the associated mappings
+        verified[original] = ZERO_BYTES;
+        cancellations[original] = replacement;
+        uint256 holderIndex = holderIndices[original] - 1;
+        stockholders[holderIndex] = replacement;
+        holderIndices[replacement] = holderIndices[original];
+        holderIndices[original] = 0;
+        balances[replacement] = balances[original];
+        balances[original] = 0;
+        VerifiedAddressSuperseded(original, replacement, msg.sender);
+    }
+
+    /**
+     *  The `transfer` function MUST NOT allow transfers to addresses that
+     *  have not been verified and added to the contract.
+     *  If the `to` address is not currently a stockholder then it MUST become one.
+     *  If the transfer will reduce `msg.sender`'s balance to 0 then that address
+     *  MUST be removed from the list of stockholders.
+     */
+    function transfer(address to, uint256 value)
+        public
+        isVerifiedAddress(to)
+        returns (bool)
+    {
+        updateStockholders(to);
+        pruneStockholders(msg.sender, value);
+        return super.transfer(to, value);
+    }
+
+    /**
+     *  The `transferFrom` function MUST NOT allow transfers to addresses that
+     *  have not been verified and added to the contract.
+     *  If the `to` address is not currently a stockholder then it MUST become one.
+     *  If the transfer will reduce `from`'s balance to 0 then that address
+     *  MUST be removed from the list of stockholders.
+     */
+    function transferFrom(address from, address to, uint256 value)
+        public
+        isVerifiedAddress(to)
+        returns (bool)
+    {
+        updateStockholders(to);
+        pruneStockholders(from, value);
+        return super.transferFrom(from, to, value);
     }
 
     /**
@@ -197,26 +260,83 @@ contract ERC884ReferenceImpl is MintableToken {
     }
 
     /**
-     *  The `transfer` function must not allow transfers to addresses that
-     *  have not been verified and added to the contract.
+     *  Checks to see if the supplied address was superseded.
+     *  @param addr The address to check.
+     *  @return true if the supplied address was superseded by another address.
      */
-    function transfer(address to, uint256 value)
+    function isSuperseded(address addr)
         public
-        isVerifiedAddress(to)
+        view
+        onlyOwner
         returns (bool)
     {
-        return super.transfer(to, value);
+        return cancellations[addr] != ZERO_ADDRESS;
     }
 
     /**
-     *  The `transferFrom` function must not allow transfers to addresses that
-     *  have not been verified and added to the contract.
+     *  Gets the most recent address given a superseded one.
+     *  Addresses may be superseded multiple times, so this function needs to
+     *  follow the chain of addresses until it reaches the final, verified address.
+     *  @param addr The superseded address.
+     *  @return the verified address that ultimately holds the stock.
      */
-    function transferFrom(address from, address to, uint256 value)
+    function getCurrentFor(address addr)
         public
-        isVerifiedAddress(to)
-        returns (bool)
+        view
+        onlyOwner
+        returns (address)
     {
-        return super.transferFrom(from, to, value);
+        return findCurrentFor(addr);
+    }
+
+    /**
+     *  Recursively find the most recent address given a superseded one.
+     *  @param addr The superseded address.
+     *  @return the verified address that ultimately holds the stock.
+     */
+    function findCurrentFor(address addr)
+        internal
+        view
+        returns (address)
+    {
+        address candidate = cancellations[addr];
+        if (candidate == ZERO_ADDRESS) {
+            return addr;
+        }
+        return findCurrentFor(candidate);
+    }
+
+    /**
+     *  if the address is not in the `stockholders` array then push it
+     *  and update the `holderIndices` mapping.
+     *  @param addr The address to add as a stockholder if it's not already.
+     */
+    function updateStockholders(address addr)
+        internal
+    {
+        if (holderIndices[addr] == 0) {
+            holderIndices[addr] = stockholders.push(addr);
+        }
+    }
+
+    /**
+     *  if the address is in the `stockholders` array and the forthcoming
+     *  transfer or transferFrom will reduce their balance to 0, then
+     *  we need to remove them from the stockholders array.
+     *  @param addr The address to prune if their balance will be reduced to 0.
+     @  @dev see https://ethereum.stackexchange.com/a/39311
+     */
+    function pruneStockholders(address addr, uint256 value)
+        internal
+    {
+        uint256 balance = balances[addr] - value;
+        if (balance > 0) {
+            return;
+        }
+        uint256 holderIndex = holderIndices[addr] - 1;
+        uint256 lastIndex = stockholders.length - 1;
+        stockholders[holderIndex] = stockholders[lastIndex];
+        stockholders.length--;
+        holderIndices[addr] = 0;
     }
 }
