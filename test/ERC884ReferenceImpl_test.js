@@ -41,6 +41,14 @@ contract("ERC884ReferenceImpl", ([owner, punter, anotherPunter]) => {
       assert.isFalse(await token.isVerified(0x0))
     })
 
+    it("isHolder(punter) is false", async () => {
+      assert.isFalse(await token.isHolder(punter))
+    })
+
+    it("isHolder(0x0) is false", async () => {
+      assert.isFalse(await token.isHolder(0x0))
+    })
+
     it("isSuperseded(punter) is false", async () => {
       assert.isFalse(await token.isSuperseded(punter))
     })
@@ -76,6 +84,10 @@ contract("ERC884ReferenceImpl", ([owner, punter, anotherPunter]) => {
         assert.isFalse(await token.isSuperseded(punter))
       })
 
+      it("isHolder(punter) is still false", async () => {
+        assert.isFalse(await token.isHolder(punter))
+      })
+
       it("won't verify the same address again", async () =>
         assertThrows(token.addVerified(punter, hash)))
 
@@ -90,6 +102,10 @@ contract("ERC884ReferenceImpl", ([owner, punter, anotherPunter]) => {
 
         it("holderAt(0) returns punter", async () => {
           assert.equal(await token.holderAt(0), punter)
+        })
+
+        it("isHolder(punter) is true", async () => {
+          assert.isTrue(await token.isHolder(punter))
         })
 
         it("can't remove a verified address that holds a token", async () =>

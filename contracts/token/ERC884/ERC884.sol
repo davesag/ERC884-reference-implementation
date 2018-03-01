@@ -146,6 +146,13 @@ contract ERC884 is ERC20 {
     function isVerified(address addr) public view returns (bool);
 
     /**
+     *  Checks to see if the supplied address is a stock holder.
+     *  @param addr The address to check.
+     *  @return true if the supplied address owns a token.
+     */
+    function isHolder(address addr) public view returns (bool);
+
+    /**
      *  Checks that the supplied hash is associated with the given address.
      *  @param addr The address to test.
      *  @param hash The hash to test.
