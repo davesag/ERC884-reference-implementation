@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:9.5.0
+      - image: circleci/node:9.6.1
 
     steps:
       - checkout
@@ -20,7 +20,11 @@ jobs:
 
       - run:
           name: Install global packages
-          command: sudo npm install -g truffle codecov
+          command: sudo npm install -g truffle codecov greenkeeper-lockfile@1
+
+      - run:
+          name: Greenkeeper Lockfile
+          command: greenkeeper-lockfile-update
 
       - run:
           name: Install dependencies
@@ -42,6 +46,10 @@ jobs:
       - run:
           name: Unit tests with code coverage
           command: npm run test:cov
+
+      - run:
+          name: Push any lockfile changes
+          command: greenkeeper-lockfile-upload
 
       - run:
           name: Send reports to codecov.io
