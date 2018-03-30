@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.21;
 
 import 'zeppelin-solidity/contracts/token/ERC20/MintableToken.sol';
 import './ERC884.sol';
@@ -20,7 +20,7 @@ import './ERC884.sol';
  *
  *  `decimals` — MUST return `0` as each Token represents a single Share and Shares are non-divisible.
  *
- *  @dev Ref https://github.com/ethereum/EIPs/pull/884
+ *  @dev Ref https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md
  */
 contract ERC884ReferenceImpl is ERC884, MintableToken {
 
@@ -121,7 +121,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         require(hash != ZERO_BYTES);
         require(verified[addr] == ZERO_BYTES);
         verified[addr] = hash;
-        VerifiedAddressAdded(addr, hash, msg.sender);
+        emit VerifiedAddressAdded(addr, hash, msg.sender);
     }
 
     /**
@@ -138,7 +138,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         require(balances[addr] == 0);
         if (verified[addr] != ZERO_BYTES) {
             verified[addr] = ZERO_BYTES;
-            VerifiedAddressRemoved(addr, msg.sender);
+            emit VerifiedAddressRemoved(addr, msg.sender);
         }
     }
 
@@ -161,7 +161,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         bytes32 oldHash = verified[addr];
         if (oldHash != hash) {
             verified[addr] = hash;
-            VerifiedAddressUpdated(addr, oldHash, hash, msg.sender);
+            emit VerifiedAddressUpdated(addr, oldHash, hash, msg.sender);
         }
     }
 
@@ -192,7 +192,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         holderIndices[original] = 0;
         balances[replacement] = balances[original];
         balances[original] = 0;
-        VerifiedAddressSuperseded(original, replacement, msg.sender);
+        emit VerifiedAddressSuperseded(original, replacement, msg.sender);
     }
 
     /**

@@ -11,18 +11,18 @@ See [ethereum/EIPs/pull/884](https://github.com/ethereum/EIPs/pull/884) for the 
 
 ## Status
 
-ERC-884 is a `DRAFT` proposal to standardise an ERC20 compatible Token that is compliant with Delaware General Corporate Law.
+An ERC-884 Token is an ERC20 compatible Token that is compliant with Delaware General Corporate Law.
 
-It has not been accepted yet and the details are subject to change.
+See [EIPS/eip-884](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md) for the official spec.
 
 ## Development
 
-The smart contracts are being implemented in Solidity `0.4.19`.
+The smart contracts are implemented using Solidity `0.4.21`.
 
 ### Development Prerequisites
 
-* [NodeJS](htps://nodejs.org), version 9.6.1 or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
-* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.0.6 or better.  Check that with `truffle version`.
+* [NodeJS](htps://nodejs.org), version 9.10.0 or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
+* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.5 or better.  Check that with `truffle version`.
 
 ### Initialisation
 
