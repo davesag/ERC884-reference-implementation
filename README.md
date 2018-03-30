@@ -2,7 +2,7 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/davesag/ERC884-reference-implementation.svg)](https://greenkeeper.io/)
 
-An Interface and Reference Implementation of the draft ERC-884 Delaware General Corporate Law compliant (DGCL) Token.
+An Interface and Reference Implementation of the ERC-884 Delaware General Corporate Law compliant (DGCL) Token.
 
 * `develop` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/develop/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
 * `master` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/master/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
