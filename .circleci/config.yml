@@ -1,0 +1,58 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:9.9.0
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: Install global packages
+          command: sudo npm install -g truffle codecov greenkeeper-lockfile@1
+
+      - run:
+          name: Greenkeeper Lockfile
+          command: greenkeeper-lockfile-update
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+      # Linting disabled until https://github.com/protofire/solhint/issues/33
+      # is resolved.
+      # - run:
+      #     name: Solidity Linter
+      #     command: npm run lint:sol
+
+      - run:
+          name: Javascript Linter
+          command: npm run lint:js
+
+      - run:
+          name: Unit tests with code coverage
+          command: npm run test:cov
+
+      - run:
+          name: Push any lockfile changes
+          command: greenkeeper-lockfile-upload
+
+      - run:
+          name: Send reports to codecov.io
+          command: codecov
