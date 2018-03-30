@@ -35,9 +35,11 @@ jobs:
           paths:
             - node_modules
 
-      - run:
-          name: Solidity Linter
-          command: npm run lint:sol
+      # Linting disabled until https://github.com/protofire/solhint/issues/33
+      # is resolved.
+      # - run:
+      #     name: Solidity Linter
+      #     command: npm run lint:sol
 
       - run:
           name: Javascript Linter
