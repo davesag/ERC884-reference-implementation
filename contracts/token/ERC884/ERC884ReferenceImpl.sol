@@ -5,20 +5,20 @@ import './ERC884.sol';
 
 
 /**
- *  An `ERC20` compatible Token that conforms to Delaware State Senate,
+ *  An `ERC20` compatible token that conforms to Delaware State Senate,
  *  149th General Assembly, Senate Bill No. 69: An act to Amend Title 8
  *  of the Delaware Code Relating to the General Corporation Law.
  *
  *  Implementation Details.
  *
- *  An implementation of this Token standard SHOULD provide the following:
+ *  An implementation of this token standard SHOULD provide the following:
  *
  *  `name` - for use by wallets and exchanges.
  *  `symbol` - for use by wallets and exchanges.
  *
  *  In addition to the above the following optional `ERC20` function MUST be defined.
  *
- *  `decimals` — MUST return `0` as each Token represents a single Share and Shares are non-divisible.
+ *  `decimals` — MUST return `0` as each token represents a single Share and Shares are non-divisible.
  *
  *  @dev Ref https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md
  */
@@ -33,19 +33,19 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     mapping(address => address) private cancellations;
     mapping(address => uint256) private holderIndices;
 
-    address[] private stockholders;
+    address[] private shareholders;
 
     modifier isVerifiedAddress(address addr) {
         require(verified[addr] != ZERO_BYTES);
         _;
     }
 
-    modifier isStockholder(address addr) {
+    modifier isShareholder(address addr) {
         require(holderIndices[addr] != 0);
         _;
     }
 
-    modifier isNotStockholder(address addr) {
+    modifier isNotShareholder(address addr) {
         require(holderIndices[addr] == 0);
         _;
     }
@@ -56,7 +56,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     }
 
     /**
-     * As each token is minted it is added to the stockholders array.
+     * As each token is minted it is added to the shareholders array.
      * @param _to The address that will receive the minted tokens.
      * @param _amount The amount of tokens to mint.
      * @return A boolean that indicates if the operation was successful.
@@ -68,9 +68,9 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         isVerifiedAddress(_to)
         returns (bool)
     {
-        // if the address does not already own stock then
-        // add the address to the stockholders array and record the index.
-        updateStockholders(_to);
+        // if the address does not already own share then
+        // add the address to the shareholders array and record the index.
+        updateShareholders(_to);
         return super.mint(_to, _amount);
     }
 
@@ -84,15 +84,15 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         view
         returns (uint)
     {
-        return stockholders.length;
+        return shareholders.length;
     }
 
     /**
-     *  By counting the number of Token holders using `holderCount`
-     *  you can retrieve the complete list of Token holders, one at a time.
+     *  By counting the number of token holders using `holderCount`
+     *  you can retrieve the complete list of token holders, one at a time.
      *  It MUST throw if `index >= holderCount()`.
      *  @param index The zero-based index of the holder.
-     *  @return the address of the Token holder with the given index.
+     *  @return the address of the token holder with the given index.
      */
     function holderAt(uint256 index)
         public
@@ -100,13 +100,13 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         view
         returns (address)
     {
-        require(index < stockholders.length);
-        return stockholders[index];
+        require(index < shareholders.length);
+        return shareholders[index];
     }
 
     /**
      *  Add a verified address, along with an associated verification hash to the contract.
-     *  Upon successful addition of a verified address the contract must emit
+     *  Upon successful addition of a verified address, the contract must emit
      *  `VerifiedAddressAdded(addr, hash, msg.sender)`.
      *  It MUST throw if the supplied address or hash are zero, or if the address has already been supplied.
      *  @param addr The address of the person represented by the supplied hash.
@@ -126,7 +126,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
 
     /**
      *  Remove a verified address, and the associated verification hash. If the address is
-     *  unknown to the contract then this does nothing. If the address is successfully removed this
+     *  unknown to the contract then this does nothing. If the address is successfully removed, this
      *  function must emit `VerifiedAddressRemoved(addr, msg.sender)`.
      *  It MUST throw if an attempt is made to remove a verifiedAddress that owns Tokens.
      *  @param addr The verified address to be removed.
@@ -169,7 +169,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
      *  Cancel the original address and reissue the Tokens to the replacement address.
      *  Access to this function MUST be strictly controlled.
      *  The `original` address MUST be removed from the set of verified addresses.
-     *  Throw if the `original` address supplied is not a stockholder.
+     *  Throw if the `original` address supplied is not a shareholder.
      *  Throw if the replacement address is not a verified address.
      *  This function MUST emit the `VerifiedAddressSuperseded` event.
      *  @param original The address to be superseded. This address MUST NOT be reused.
@@ -178,16 +178,16 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     function cancelAndReissue(address original, address replacement)
         public
         onlyOwner
-        isStockholder(original)
-        isNotStockholder(replacement)
+        isShareholder(original)
+        isNotShareholder(replacement)
         isVerifiedAddress(replacement)
     {
-        // replace the original address in the stockholders array
+        // replace the original address in the shareholders array
         // and update all the associated mappings
         verified[original] = ZERO_BYTES;
         cancellations[original] = replacement;
         uint256 holderIndex = holderIndices[original] - 1;
-        stockholders[holderIndex] = replacement;
+        shareholders[holderIndex] = replacement;
         holderIndices[replacement] = holderIndices[original];
         holderIndices[original] = 0;
         balances[replacement] = balances[original];
@@ -198,34 +198,34 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     /**
      *  The `transfer` function MUST NOT allow transfers to addresses that
      *  have not been verified and added to the contract.
-     *  If the `to` address is not currently a stockholder then it MUST become one.
+     *  If the `to` address is not currently a shareholder then it MUST become one.
      *  If the transfer will reduce `msg.sender`'s balance to 0 then that address
-     *  MUST be removed from the list of stockholders.
+     *  MUST be removed from the list of shareholders.
      */
     function transfer(address to, uint256 value)
         public
         isVerifiedAddress(to)
         returns (bool)
     {
-        updateStockholders(to);
-        pruneStockholders(msg.sender, value);
+        updateShareholders(to);
+        pruneShareholders(msg.sender, value);
         return super.transfer(to, value);
     }
 
     /**
      *  The `transferFrom` function MUST NOT allow transfers to addresses that
      *  have not been verified and added to the contract.
-     *  If the `to` address is not currently a stockholder then it MUST become one.
+     *  If the `to` address is not currently a shareholder then it MUST become one.
      *  If the transfer will reduce `from`'s balance to 0 then that address
-     *  MUST be removed from the list of stockholders.
+     *  MUST be removed from the list of shareholders.
      */
     function transferFrom(address from, address to, uint256 value)
         public
         isVerifiedAddress(to)
         returns (bool)
     {
-        updateStockholders(to);
-        pruneStockholders(from, value);
+        updateShareholders(to);
+        pruneShareholders(from, value);
         return super.transferFrom(from, to, value);
     }
 
@@ -243,7 +243,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     }
 
     /**
-     *  Checks to see if the supplied address is a stock holder.
+     *  Checks to see if the supplied address is a share holder.
      *  @param addr The address to check.
      *  @return true if the supplied address owns a token.
      */
@@ -287,11 +287,11 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     }
 
     /**
-     *  Gets the most recent address given a superseded one.
+     *  Gets the most recent address, given a superseded one.
      *  Addresses may be superseded multiple times, so this function needs to
      *  follow the chain of addresses until it reaches the final, verified address.
      *  @param addr The superseded address.
-     *  @return the verified address that ultimately holds the stock.
+     *  @return the verified address that ultimately holds the share.
      */
     function getCurrentFor(address addr)
         public
@@ -305,7 +305,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     /**
      *  Recursively find the most recent address given a superseded one.
      *  @param addr The superseded address.
-     *  @return the verified address that ultimately holds the stock.
+     *  @return the verified address that ultimately holds the share.
      */
     function findCurrentFor(address addr)
         internal
@@ -320,26 +320,26 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     }
 
     /**
-     *  if the address is not in the `stockholders` array then push it
+     *  if the address is not in the `shareholders` array then push it
      *  and update the `holderIndices` mapping.
-     *  @param addr The address to add as a stockholder if it's not already.
+     *  @param addr The address to add as a shareholder if it's not already.
      */
-    function updateStockholders(address addr)
+    function updateShareholders(address addr)
         internal
     {
         if (holderIndices[addr] == 0) {
-            holderIndices[addr] = stockholders.push(addr);
+            holderIndices[addr] = shareholders.push(addr);
         }
     }
 
     /**
-     *  if the address is in the `stockholders` array and the forthcoming
+     *  if the address is in the `shareholders` array and the forthcoming
      *  transfer or transferFrom will reduce their balance to 0, then
-     *  we need to remove them from the stockholders array.
+     *  we need to remove them from the shareholders array.
      *  @param addr The address to prune if their balance will be reduced to 0.
      @  @dev see https://ethereum.stackexchange.com/a/39311
      */
-    function pruneStockholders(address addr, uint256 value)
+    function pruneShareholders(address addr, uint256 value)
         internal
     {
         uint256 balance = balances[addr] - value;
@@ -347,9 +347,9 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
             return;
         }
         uint256 holderIndex = holderIndices[addr] - 1;
-        uint256 lastIndex = stockholders.length - 1;
-        stockholders[holderIndex] = stockholders[lastIndex];
-        stockholders.length--;
+        uint256 lastIndex = shareholders.length - 1;
+        shareholders[holderIndex] = shareholders[lastIndex];
+        shareholders.length--;
         holderIndices[addr] = 0;
     }
 }

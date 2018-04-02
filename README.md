@@ -2,14 +2,14 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/davesag/ERC884-reference-implementation.svg)](https://greenkeeper.io/)
 
-An Interface and Reference Implementation of the ERC-884 Delaware General Corporate Law compliant (DGCL) Token.
+An Interface and Reference Implementation of the ERC-884 Delaware General Corporate Law compliant (DGCL) token.
 
 * `develop` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/develop/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
 * `master` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/master/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
 
 ## Status
 
-An ERC-884 Token is an ERC20 compatible Token that is compliant with Delaware General Corporate Law.
+An ERC-884 token is an ERC20 compatible token that is compliant with Delaware General Corporate Law.
 
 See [EIPS/eip-884](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md) for the official spec.
 

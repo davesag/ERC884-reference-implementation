@@ -1,8 +1,8 @@
 {
   "name": "@davesag/ERC884-reference-implementation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description":
-    "An Interface and Reference Implementation of the ERC-884 (DGCL) Token.",
+    "An interface definition, and reference implementation for the ERC-884 token.",
   "main": "truffle.js",
   "directories": {
     "test": "test",
@@ -16,7 +16,7 @@
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.8.0",
     "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.3.1",
@@ -24,7 +24,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "faker": "^4.1.0",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
+    "lint-staged": "^7.0.2",
     "prettier": "^1.11.1",
     "solhint": "^1.1.10",
     "solidity-coverage": "^0.4.15"
@@ -46,7 +46,7 @@
     "type": "git",
     "url": "https://github.com/davesag/ERC884-reference-implementation.git"
   },
-  "keywords": ["ERC-20", "Ethereum", "DGCL", "token", "stock"],
+  "keywords": ["ERC-20", "Ethereum", "DGCL", "token", "share"],
   "author": "Dave Sag <davesag@gmail.com>",
   "contributors": [],
   "license": "MIT",
