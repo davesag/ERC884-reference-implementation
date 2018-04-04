@@ -2,14 +2,14 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/davesag/ERC884-reference-implementation.svg)](https://greenkeeper.io/)
 
-An Interface and Reference Implementation of the ERC-884 Delaware General Corporate Law compliant (DGCL) Token.
+An Interface and Reference Implementation of the `ERC-884` Delaware General Corporate Law compliant (DGCL) token.
 
 * `develop` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/develop) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/develop/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
 * `master` — [![CircleCI](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master.svg?style=svg)](https://circleci.com/gh/davesag/ERC884-reference-implementation/tree/master) [![codecov](https://codecov.io/gh/davesag/ERC884-reference-implementation/branch/master/graph/badge.svg)](https://codecov.io/gh/davesag/ERC884-reference-implementation)
 
 ## Status
 
-An ERC-884 Token is an ERC20 compatible Token that is compliant with Delaware General Corporate Law.
+An `ERC-884` token is an `ERC-20` compatible token that is compliant with Delaware General Corporate Law.
 
 See [EIPS/eip-884](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md) for the official spec.
 
@@ -19,7 +19,7 @@ The smart contracts are implemented using Solidity `0.4.21`.
 
 ### Development Prerequisites
 
-* [NodeJS](htps://nodejs.org), version 9.10.0 or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
+* [NodeJS](htps://nodejs.org), version 9.10.1 or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
 * [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.5 or better.  Check that with `truffle version`.
 
 ### Initialisation
