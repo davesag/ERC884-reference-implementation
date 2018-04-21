@@ -15,11 +15,11 @@ See [EIPS/eip-884](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md)
 
 ## Development
 
-The smart contracts are implemented using Solidity `0.4.21`.
+The smart contracts are implemented using Solidity `0.4.23`.
 
 ### Development Prerequisites
 
-* [NodeJS](htps://nodejs.org), version 9.10.1 or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
+* [NodeJS](htps://nodejs.org), version 9.11.1 or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
 * [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.5 or better.  Check that with `truffle version`.
 
 ### Initialisation
