@@ -9,8 +9,8 @@
     "contracts": "contracts"
   },
   "engines": {
-    "node": "9.11.1",
-    "npm": "5.8.0"
+    "node": "10.0.0",
+    "npm": "6.0.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -21,10 +21,10 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-standard": "^3.1.0",
     "faker": "^4.1.0",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.4",
+    "lint-staged": "^7.0.5",
     "prettier": "^1.12.1",
     "solhint": "^1.1.10",
     "solidity-coverage": "^0.5.0"
@@ -40,7 +40,7 @@
     "lint:js": "eslint test/**/*.js"
   },
   "lint-staged": {
-    "**/*.{js,json}": ["prettier --singlequote --no-semi --write", "git add"]
+    "**/*.{js,json}": ["prettier --single-quote --no-semi --write", "git add"]
   },
   "repository": {
     "type": "git",
@@ -56,6 +56,6 @@
   "homepage":
     "https://github.com/davesag/ERC884-reference-implementation#readme",
   "dependencies": {
-    "zeppelin-solidity": "1.8.0"
+    "zeppelin-solidity": "1.9.0"
   }
 }
