@@ -20,7 +20,7 @@ The smart contracts are implemented using Solidity `0.4.23`.
 ### Development Prerequisites
 
 * [NodeJS](htps://nodejs.org), version 10+ or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
-* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.7 or better.  Check that with `truffle version`.
+* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.8 or better.  Check that with `truffle version`.
 
 ### Initialisation
 
@@ -57,7 +57,7 @@ You can use the following linting options
 * `npm run lint:sol` — to lint the Solidity files, and
 * `npm run lint:js` — to lint the Javascript.
 
-*Note*:  The newer versions of Solidity expect the `emit` keyword to be used in conjunction with emitting events (not unreasonable) but this has broken all of the solidity linters.  Until this is fixed (see https://github.com/protofire/solhint/pull/40) the linting has been disabled.
+*Note*:  The newer versions of Solidity prefer the new `constructor` keyword to be used instead of using the contract's name as a constructor. Unfortunately making this change breaks the linter in other ways.
 
 ## Contributing
 
