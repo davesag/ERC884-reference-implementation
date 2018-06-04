@@ -1,3 +1,3 @@
 module.exports = {
-  copyPackages: ['zeppelin-solidity']
+  copyPackages: ['openzeppelin-solidity']
 }

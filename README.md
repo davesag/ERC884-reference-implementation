@@ -11,16 +11,17 @@ An Interface and Reference Implementation of the `ERC-884` Delaware General Corp
 
 An `ERC-884` token is an `ERC-20` compatible token that is compliant with Delaware General Corporate Law.
 
-See [EIPS/eip-884](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md) for the official spec.
+* See [EIPS/eip-884](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-884.md) for the official spec.
+* * See [Tokenising Shares: Introducing ERC-884](https://medium.com/coinmonks/tokenising-shares-introducing-erc-884-cc491258e413) for a more wordy overview.
 
 ## Development
 
-The smart contracts are implemented using Solidity `0.4.23`.
+The smart contracts are implemented using Solidity `0.4.24`.
 
 ### Development Prerequisites
 
 * [NodeJS](htps://nodejs.org), version 10+ or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
-* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.8 or better.  Check that with `truffle version`.
+* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.11 or better.  Check that with `truffle version`.
 
 ### Initialisation
 
@@ -56,8 +57,6 @@ You can use the following linting options
 
 * `npm run lint:sol` — to lint the Solidity files, and
 * `npm run lint:js` — to lint the Javascript.
-
-*Note*:  The newer versions of Solidity prefer the new `constructor` keyword to be used instead of using the contract's name as a constructor. Unfortunately making this change breaks the linter in other ways.
 
 ## Contributing
 

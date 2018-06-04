@@ -1,16 +1,15 @@
 {
   "name": "@davesag/ERC884-reference-implementation",
   "version": "1.0.3",
-  "description":
-    "An interface definition, and reference implementation for the ERC-884 token.",
+  "description": "An interface definition, and reference implementation for the ERC-884 token.",
   "main": "truffle.js",
   "directories": {
     "test": "test",
     "contracts": "contracts"
   },
   "engines": {
-    "node": "10.0.0",
-    "npm": "6.0.0"
+    "node": "10.3.0",
+    "npm": "6.1.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -20,42 +19,49 @@
     "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.3.1",
-    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "faker": "^4.1.0",
     "husky": "^0.14.3",
-    "lint-staged": "^7.1.1",
-    "prettier": "^1.12.1",
+    "lint-staged": "^7.1.3",
+    "prettier": "^1.13.4",
     "solhint": "^1.2.1",
-    "solidity-coverage": "^0.5.1"
+    "solidity-coverage": "^0.5.4"
   },
   "scripts": {
     "precommit": "lint-staged",
     "prettier": "prettier --single-quote --no-semi --write '**/*.{js,json}'",
-    "eslint-check":
-      "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "test": "truffle test",
     "test:cov": "solidity-coverage",
     "lint:sol": "solhint contracts/**/*.sol",
     "lint:js": "eslint test/**/*.js"
   },
   "lint-staged": {
-    "**/*.{js,json}": ["prettier --single-quote --no-semi --write", "git add"]
+    "**/*.{js,json}": [
+      "prettier --single-quote --no-semi --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/davesag/ERC884-reference-implementation.git"
   },
-  "keywords": ["ERC-20", "Ethereum", "DGCL", "token", "share"],
+  "keywords": [
+    "ERC-20",
+    "Ethereum",
+    "DGCL",
+    "token",
+    "share"
+  ],
   "author": "Dave Sag <davesag@gmail.com>",
   "contributors": [],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/davesag/ERC884-reference-implementation/issues"
   },
-  "homepage":
-    "https://github.com/davesag/ERC884-reference-implementation#readme",
+  "homepage": "https://github.com/davesag/ERC884-reference-implementation#readme",
   "dependencies": {
-    "zeppelin-solidity": "1.9.0"
+    "openzeppelin-solidity": "^1.9.0"
   }
 }
