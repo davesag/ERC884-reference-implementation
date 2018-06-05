@@ -1,26 +1,26 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
-import 'zeppelin-solidity/contracts/token/ERC20/ERC20.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 
 /**
- *  An `ERC20` compatible Token that conforms to Delaware State Senate,
+ *  An `ERC20` compatible token that conforms to Delaware State Senate,
  *  149th General Assembly, Senate Bill No. 69: An act to Amend Title 8
  *  of the Delaware Code Relating to the General Corporation Law.
  *
  *  Implementation Details.
  *
- *  An implementation of this Token standard SHOULD provide the following:
+ *  An implementation of this token standard SHOULD provide the following:
  *
  *  `name` - for use by wallets and exchanges.
  *  `symbol` - for use by wallets and exchanges.
  *
- *  The implementation MUST take care not to allow unauthorised access to stock
+ *  The implementation MUST take care not to allow unauthorised access to share
  *  transfer functions.
  *
  *  In addition to the above the following optional `ERC20` function MUST be defined.
  *
- *  `decimals` — MUST return `0` as each Token represents a single Share and Shares are non-divisible.
+ *  `decimals` — MUST return `0` as each token represents a single Share and Shares are non-divisible.
  *
  *  @dev Ref https://github.com/ethereum/EIPs/pull/884
  */
@@ -63,10 +63,10 @@ contract ERC884 is ERC20 {
 
     /**
      *  This event is emitted when an address is cancelled and replaced with
-     *  a new address.  This happens in the case where a stockholder has
-     *  lost access to their original address and needs to have their stock
+     *  a new address.  This happens in the case where a shareholder has
+     *  lost access to their original address and needs to have their share
      *  reissued to a new address.  This is the equivalent of issuing replacement
-     *  stock certificates.
+     *  share certificates.
      *  @param original The address being superseded.
      *  @param replacement The new address.
      *  @param sender The address that caused the address to be superseded.
@@ -79,7 +79,7 @@ contract ERC884 is ERC20 {
 
     /**
      *  Add a verified address, along with an associated verification hash to the contract.
-     *  Upon successful addition of a verified address the contract must emit
+     *  Upon successful addition of a verified address, the contract must emit
      *  `VerifiedAddressAdded(addr, hash, msg.sender)`.
      *  It MUST throw if the supplied address or hash are zero, or if the address has already been supplied.
      *  @param addr The address of the person represented by the supplied hash.
@@ -89,7 +89,7 @@ contract ERC884 is ERC20 {
 
     /**
      *  Remove a verified address, and the associated verification hash. If the address is
-     *  unknown to the contract then this does nothing. If the address is successfully removed this
+     *  unknown to the contract then this does nothing. If the address is successfully removed, this
      *  function must emit `VerifiedAddressRemoved(addr, msg.sender)`.
      *  It MUST throw if an attempt is made to remove a verifiedAddress that owns Tokens.
      *  @param addr The verified address to be removed.
@@ -112,7 +112,7 @@ contract ERC884 is ERC20 {
      *  Cancel the original address and reissue the Tokens to the replacement address.
      *  Access to this function MUST be strictly controlled.
      *  The `original` address MUST be removed from the set of verified addresses.
-     *  Throw if the `original` address supplied is not a stockholder.
+     *  Throw if the `original` address supplied is not a shareholder.
      *  Throw if the `replacement` address is not a verified address.
      *  Throw if the `replacement` address already holds Tokens.
      *  This function MUST emit the `VerifiedAddressSuperseded` event.
@@ -123,18 +123,18 @@ contract ERC884 is ERC20 {
     /**
      *  The `transfer` function MUST NOT allow transfers to addresses that
      *  have not been verified and added to the contract.
-     *  If the `to` address is not currently a stockholder then it MUST become one.
+     *  If the `to` address is not currently a shareholder then it MUST become one.
      *  If the transfer will reduce `msg.sender`'s balance to 0 then that address
-     *  MUST be removed from the list of stockholders.
+     *  MUST be removed from the list of shareholders.
      */
     function transfer(address to, uint256 value) public returns (bool);
 
     /**
      *  The `transferFrom` function MUST NOT allow transfers to addresses that
      *  have not been verified and added to the contract.
-     *  If the `to` address is not currently a stockholder then it MUST become one.
+     *  If the `to` address is not currently a shareholder then it MUST become one.
      *  If the transfer will reduce `from`'s balance to 0 then that address
-     *  MUST be removed from the list of stockholders.
+     *  MUST be removed from the list of shareholders.
      */
     function transferFrom(address from, address to, uint256 value) public returns (bool);
 
@@ -146,7 +146,7 @@ contract ERC884 is ERC20 {
     function isVerified(address addr) public view returns (bool);
 
     /**
-     *  Checks to see if the supplied address is a stock holder.
+     *  Checks to see if the supplied address is a share holder.
      *  @param addr The address to check.
      *  @return true if the supplied address owns a token.
      */
@@ -167,11 +167,11 @@ contract ERC884 is ERC20 {
     function holderCount() public view returns (uint);
 
     /**
-     *  By counting the number of Token holders using `holderCount`
-     *  you can retrieve the complete list of Token holders, one at a time.
+     *  By counting the number of token holders using `holderCount`
+     *  you can retrieve the complete list of token holders, one at a time.
      *  It MUST throw if `index >= holderCount()`.
      *  @param index The zero-based index of the holder.
-     *  @return the address of the Token holder with the given index.
+     *  @return the address of the token holder with the given index.
      */
     function holderAt(uint256 index) public view returns (address);
 
@@ -183,11 +183,11 @@ contract ERC884 is ERC20 {
     function isSuperseded(address addr) public view returns (bool);
 
     /**
-     *  Gets the most recent address given a superseded one.
+     *  Gets the most recent address, given a superseded one.
      *  Addresses may be superseded multiple times, so this function needs to
      *  follow the chain of addresses until it reaches the final, verified address.
      *  @param addr The superseded address.
-     *  @return the verified address that ultimately holds the stock.
+     *  @return the verified address that ultimately holds the share.
      */
     function getCurrentFor(address addr) public view returns (address);
 }
