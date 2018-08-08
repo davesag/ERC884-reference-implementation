@@ -73,6 +73,11 @@ contract(
         it('punter now has no tokens so holderCount() is now 1', () => {
           assert.equal(holderCount.toNumber(), 1)
         })
+
+        it('punter is no longer a shareholder', async () => {
+          const isShareholder = await token.isHolder(punter)
+          assert.isFalse(isShareholder)
+        })
       })
     })
   }

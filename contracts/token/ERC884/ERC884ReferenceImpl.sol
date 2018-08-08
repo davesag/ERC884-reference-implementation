@@ -320,7 +320,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     }
 
     /**
-     *  if the address is not in the `shareholders` array then push it
+     *  If the address is not in the `shareholders` array then push it
      *  and update the `holderIndices` mapping.
      *  @param addr The address to add as a shareholder if it's not already.
      */
@@ -333,7 +333,7 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
     }
 
     /**
-     *  if the address is in the `shareholders` array and the forthcoming
+     *  If the address is in the `shareholders` array and the forthcoming
      *  transfer or transferFrom will reduce their balance to 0, then
      *  we need to remove them from the shareholders array.
      *  @param addr The address to prune if their balance will be reduced to 0.
@@ -348,8 +348,15 @@ contract ERC884ReferenceImpl is ERC884, MintableToken {
         }
         uint256 holderIndex = holderIndices[addr] - 1;
         uint256 lastIndex = shareholders.length - 1;
-        shareholders[holderIndex] = shareholders[lastIndex];
+        address lastHolder = shareholders[lastIndex];
+        // overwrite the addr's slot with the last shareholder
+        shareholders[holderIndex] = lastHolder;
+        // also copy over the index (thanks @mohoff for spotting this)
+        // ref https://github.com/davesag/ERC884-reference-implementation/issues/20
+        holderIndices[lastHolder] = holderIndices[addr];
+        // trim the shareholders array (which drops the last entry)
         shareholders.length--;
+        // and zero out the index for addr
         holderIndices[addr] = 0;
     }
 }
