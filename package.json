@@ -1,6 +1,6 @@
 {
   "name": "@davesag/ERC884-reference-implementation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "An interface definition, and reference implementation for the ERC-884 token.",
   "main": "truffle.js",
   "directories": {
@@ -8,8 +8,8 @@
     "contracts": "contracts"
   },
   "engines": {
-    "node": "10.3.0",
-    "npm": "6.1.0"
+    "node": "10.8.0",
+    "npm": "6.3.0"
   },
   "devDependencies": {
     "eslint": "^5.0.0",
