@@ -29,7 +29,6 @@
     "solidity-coverage": "^0.5.11"
   },
   "scripts": {
-    "precommit": "lint-staged",
     "prettier": "prettier --single-quote --no-semi --write '**/*.{js,json}'",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "test": "truffle test",
@@ -63,5 +62,10 @@
   "homepage": "https://github.com/davesag/ERC884-reference-implementation#readme",
   "dependencies": {
     "openzeppelin-solidity": "^1.12.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
