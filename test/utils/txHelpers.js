@@ -46,8 +46,11 @@ const getAddress = (tx, event, variable) => {
 const getContract = (tx, event, variable, Contract) =>
   Contract.at(getAddress(tx, event, variable))
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
 module.exports = {
   getLog,
   getAddress,
-  getContract
+  getContract,
+  ZERO_ADDRESS
 }

@@ -3,7 +3,7 @@ const ERC884ReferenceImpl = artifacts.require(
 )
 
 const assertThrows = require('./utils/assertThrows')
-const { getLog } = require('./utils/txHelpers')
+const { getLog, ZERO_ADDRESS } = require('./utils/txHelpers')
 
 contract('ERC884ReferenceImpl', ([owner, punter, anotherPunter]) => {
   let token
@@ -37,35 +37,35 @@ contract('ERC884ReferenceImpl', ([owner, punter, anotherPunter]) => {
       assert.isFalse(await token.isVerified(punter))
     })
 
-    it('isVerified(0x0) is false', async () => {
-      assert.isFalse(await token.isVerified(0x0))
+    it('isVerified(ZERO_ADDRESS) is false', async () => {
+      assert.isFalse(await token.isVerified(ZERO_ADDRESS))
     })
 
     it('isHolder(punter) is false', async () => {
       assert.isFalse(await token.isHolder(punter))
     })
 
-    it('isHolder(0x0) is false', async () => {
-      assert.isFalse(await token.isHolder(0x0))
+    it('isHolder(ZERO_ADDRESS) is false', async () => {
+      assert.isFalse(await token.isHolder(ZERO_ADDRESS))
     })
 
     it('isSuperseded(punter) is false', async () => {
       assert.isFalse(await token.isSuperseded(punter))
     })
 
-    it('isSuperseded(0x0) is false', async () => {
-      assert.isFalse(await token.isSuperseded(0x0))
+    it('isSuperseded(ZERO_ADDRESS) is false', async () => {
+      assert.isFalse(await token.isSuperseded(ZERO_ADDRESS))
     })
   })
 
   context('verify a punter', () => {
-    const hash = 'someHash'
+    const hash = web3.utils.toHex('someHash')
 
     it('zero address throws', async () =>
-      assertThrows(token.addVerified(0x0, hash)))
+      assertThrows(token.addVerified(ZERO_ADDRESS, hash)))
 
     it('zero hash throws', async () =>
-      assertThrows(token.addVerified(punter, '')))
+      assertThrows(token.addVerified(punter, web3.utils.toHex(''))))
 
     context('given a punter and hash', () => {
       before(async () => {
@@ -117,19 +117,21 @@ contract('ERC884ReferenceImpl', ([owner, punter, anotherPunter]) => {
           })
 
           it('given incorrect hash for punter returns false', async () => {
-            assert.isFalse(await token.hasHash(punter, 'nonsense'))
+            assert.isFalse(
+              await token.hasHash(punter, web3.utils.toHex('nonsense'))
+            )
           })
 
-          it('given a hash but 0x0 address returns false', async () => {
-            assert.isFalse(await token.hasHash(0x0, hash))
+          it('given a hash but ZERO_ADDRESS address returns false', async () => {
+            assert.isFalse(await token.hasHash(ZERO_ADDRESS, hash))
           })
 
           it('given a zero hash returns false', async () => {
-            assert.isFalse(await token.hasHash(punter, ''))
+            assert.isFalse(await token.hasHash(punter, web3.utils.toHex('')))
           })
 
           context('updateVerified', () => {
-            const newHash = 'some fancy new hash'
+            const newHash = web3.utils.toHex('some fancy new hash')
 
             before(async () => {
               tx = await token.updateVerified(punter, newHash)
@@ -144,10 +146,15 @@ contract('ERC884ReferenceImpl', ([owner, punter, anotherPunter]) => {
             })
 
             it('given zero address throws', async () =>
-              assertThrows(token.updateVerified(0x0, 'something something')))
+              assertThrows(
+                token.updateVerified(
+                  ZERO_ADDRESS,
+                  web3.utils.toHex('something something')
+                )
+              ))
 
             it('given zero hash throws', async () =>
-              assertThrows(token.updateVerified(punter, '')))
+              assertThrows(token.updateVerified(punter, web3.utils.toHex(''))))
 
             context('given identical hash', () => {
               before(async () => {
@@ -164,7 +171,8 @@ contract('ERC884ReferenceImpl', ([owner, punter, anotherPunter]) => {
   })
 
   context('verify another punter', () => {
-    const hash = 'some other hash'
+    const hash = web3.utils.toHex('some other hash')
+
     before(async () => {
       await token.addVerified(anotherPunter, hash)
     })

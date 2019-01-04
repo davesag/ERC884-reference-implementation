@@ -3,7 +3,7 @@ const ERC884ReferenceImpl = artifacts.require(
 )
 
 const assertThrows = require('./utils/assertThrows')
-const { getLog } = require('./utils/txHelpers')
+const { getLog, ZERO_ADDRESS } = require('./utils/txHelpers')
 
 contract(
   'ERC884ReferenceImpl (cancelAndReissue)',
@@ -20,10 +20,19 @@ contract(
 
     before(async () => {
       token = await ERC884ReferenceImpl.new()
-      await token.addVerified(punterWithTokens, 'some hash')
-      await token.addVerified(punterWithoutTokens, 'some other hash')
-      await token.addVerified(anotherPunterWithTokens, 'some third hash')
-      await token.addVerified(anotherPunterWithoutTokens, 'some fourth hash')
+      await token.addVerified(punterWithTokens, web3.utils.toHex('some hash'))
+      await token.addVerified(
+        punterWithoutTokens,
+        web3.utils.toHex('some other hash')
+      )
+      await token.addVerified(
+        anotherPunterWithTokens,
+        web3.utils.toHex('some third hash')
+      )
+      await token.addVerified(
+        anotherPunterWithoutTokens,
+        web3.utils.toHex('some fourth hash')
+      )
       await token.mint(punterWithTokens, 10)
       await token.mint(anotherPunterWithTokens, 5)
     })
@@ -37,8 +46,8 @@ contract(
           )
         })
 
-        it('getCurrentFor(0x0) is 0x0', async () => {
-          assert.equal(await token.getCurrentFor(0x0), 0x0)
+        it('getCurrentFor(ZERO_ADDRESS) is ZERO_ADDRESS', async () => {
+          assert.equal(await token.getCurrentFor(ZERO_ADDRESS), ZERO_ADDRESS)
         })
       })
 
@@ -96,7 +105,12 @@ contract(
         })
 
         it("can't verify punterWithTokens", () =>
-          assertThrows(token.addVerified(punterWithTokens, 'some new hash')))
+          assertThrows(
+            token.addVerified(
+              punterWithTokens,
+              web3.utils.toHex('some new hash')
+            )
+          ))
 
         it("can't unverify punterWithoutTokens", () =>
           assertThrows(token.removeVerified(punterWithoutTokens)))

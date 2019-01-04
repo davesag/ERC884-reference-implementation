@@ -20,8 +20,8 @@ The smart contracts are implemented using Solidity `0.4.24`.
 
 ### Development Prerequisites
 
-* [NodeJS](htps://nodejs.org), version 10+ or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
-* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v4.1.14 or better.  Check that with `truffle version`.
+* [NodeJS](htps://nodejs.org), version 11.6+ or better (I use [`nvm`](https://github.com/creationix/nvm) to manage Node versions — `brew install nvm`.)
+* [truffle](http://truffleframework.com/), which is a comprehensive framework for Ethereum development. `npm install -g truffle` — this should install Truffle v5.0.1 or better.  Check that with `truffle version`.
 
 ### Initialisation
 

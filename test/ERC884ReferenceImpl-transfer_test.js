@@ -13,8 +13,11 @@ contract(
 
     before(async () => {
       token = await ERC884ReferenceImpl.new()
-      await token.addVerified(punter, 'some hash')
-      await token.addVerified(anotherPunter, 'some other hash')
+      await token.addVerified(punter, web3.utils.toHex('some hash'))
+      await token.addVerified(
+        anotherPunter,
+        web3.utils.toHex('some other hash')
+      )
       await token.mint(punter, 10)
     })
 
