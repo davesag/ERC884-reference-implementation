@@ -14,7 +14,14 @@ jobs:
 
       - run:
           name: Set up NPM to install global packages without sudo
-          command: wget -O- https://raw.githubusercontent.com/glenpike/npm-g_nosudo/master/npm-g-nosudo.sh | sh
+          command:
+            - >
+              wget -O- https://raw.githubusercontent.com/glenpike/npm-g_nosudo/master/npm-g-nosudo.sh | sh
+              export NPM_PACKAGES="/home/circleci/.npm-packages"
+              export NODE_PATH="$NPM_PACKAGES/lib/node_modules${NODE_PATH:+:$NODE_PATH}"
+              export PATH="$NPM_PACKAGES/bin:$PATH"
+              unset MANPATH
+              export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
           # see https://github.com/glenpike/npm-g_nosudo
           # see https://github.com/trufflesuite/truffle/issues/1212
 
