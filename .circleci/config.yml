@@ -15,7 +15,7 @@ jobs:
       - run:
           name: Set up NPM to install global packages without sudo
           command:
-            - >
+            ->
               wget -O- https://raw.githubusercontent.com/glenpike/npm-g_nosudo/master/npm-g-nosudo.sh | sh
               export NPM_PACKAGES="/home/circleci/.npm-packages"
               export NODE_PATH="$NPM_PACKAGES/lib/node_modules${NODE_PATH:+:$NODE_PATH}"
