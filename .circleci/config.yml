@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:latest
 
     steps:
       - checkout
@@ -28,9 +28,9 @@ jobs:
           name: Install global packages (without sudo)
           command: npm install -g truffle codecov greenkeeper-lockfile@1
 
-      - run:
-          name: Greenkeeper Lockfile
-          command: greenkeeper-lockfile-update
+      # - run:
+      #     name: Greenkeeper Lockfile
+      #     command: greenkeeper-lockfile-update
 
       - run:
           name: Install dependencies
@@ -59,9 +59,9 @@ jobs:
           name: Unit tests
           command: npm test
 
-      - run:
-          name: Push any lockfile changes
-          command: greenkeeper-lockfile-upload
+      # - run:
+      #     name: Push any lockfile changes
+      #     command: greenkeeper-lockfile-upload
 
       # as per comments above.
       # - run:
