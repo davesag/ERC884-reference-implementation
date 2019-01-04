@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:latest
 
     steps:
       - checkout
@@ -43,14 +43,17 @@ jobs:
           name: Javascript Linter
           command: npm run lint:js
 
-      - run:
-          name: Unit tests with code coverage
-          command: npm run test:cov
+      # disabled until solidity-coverage supports truffle 5.
+      # see https://github.com/sc-forks/solidity-coverage/pull/311
+      # - run:
+      #     name: Unit tests with code coverage
+      #     command: npm run test:cov
 
       - run:
           name: Push any lockfile changes
           command: greenkeeper-lockfile-upload
 
-      - run:
-          name: Send reports to codecov.io
-          command: codecov
+      # as per comments above.
+      # - run:
+      #     name: Send reports to codecov.io
+      #     command: codecov
