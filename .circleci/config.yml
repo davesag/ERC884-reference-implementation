@@ -19,8 +19,14 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: Install global packages
-          command: sudo npm install -g truffle codecov greenkeeper-lockfile@1
+          name: Set up NPM to install global packages without sudo
+          command: wget -O- https://raw.githubusercontent.com/glenpike/npm-g_nosudo/master/npm-g-nosudo.sh | sh
+          # see https://github.com/glenpike/npm-g_nosudo
+          # see https://github.com/trufflesuite/truffle/issues/1212
+
+      - run:
+          name: Install global packages (without sudo)
+          command: npm install -g truffle codecov greenkeeper-lockfile@1
 
       - run:
           name: Greenkeeper Lockfile
