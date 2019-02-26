@@ -61,7 +61,7 @@
   },
   "homepage": "https://github.com/davesag/ERC884-reference-implementation#readme",
   "dependencies": {
-    "openzeppelin-solidity": "^1.12.0"
+    "openzeppelin-solidity": "^2.1.3"
   },
   "husky": {
     "hooks": {
