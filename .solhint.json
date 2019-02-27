@@ -1,5 +1,6 @@
 {
-  "extends": "default",
+  "extends": "solhint:default",
+  "plugins": [],
   "rules": {
     "compiler-fixed": false,
     "indent": ["error", 4],
