@@ -8,24 +8,24 @@
     "contracts": "contracts"
   },
   "engines": {
-    "node": "11.9.0",
-    "npm": "6.5.0"
+    "node": ">= 11.10.0",
+    "npm": ">= 6.5.0"
   },
   "devDependencies": {
-    "eslint": "^5.13.0",
+    "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-mocha": "^5.2.1",
+    "eslint-plugin-mocha": "^5.3.0",
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "faker": "^4.1.0",
     "husky": "^1.3.1",
-    "lint-staged": "^8.1.3",
+    "lint-staged": "^8.1.4",
     "prettier": "^1.16.4",
-    "solhint": "^1.5.1",
+    "solhint": "^2.0.0",
     "solidity-coverage": "^0.5.11"
   },
   "scripts": {
@@ -67,5 +67,10 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "greenkeeper": {
+    "ignore": [
+      "openzeppelin-solidity"
+    ]
   }
 }

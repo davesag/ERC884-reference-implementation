@@ -50,6 +50,10 @@ jobs:
       #     command: npm run test:cov
 
       - run:
+          name: Unit tests without code coverage
+          command: npm run test
+
+      - run:
           name: Push any lockfile changes
           command: greenkeeper-lockfile-upload
 
