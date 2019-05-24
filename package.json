@@ -25,7 +25,7 @@
     "husky": "^2.3.0",
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
-    "solhint": "^2.0.0",
+    "solhint": "^1.5.1",
     "solidity-coverage": "^0.5.11"
   },
   "scripts": {
@@ -70,7 +70,8 @@
   },
   "greenkeeper": {
     "ignore": [
-      "openzeppelin-solidity"
+      "openzeppelin-solidity",
+      "solhint"
     ]
   }
 }
